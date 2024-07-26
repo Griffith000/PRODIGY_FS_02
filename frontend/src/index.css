@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .sidebar{
+        @apply flex flex-col w-64 h-screen bg-slate-800 border-r border-gray-300 text-white; 
+       
+    }
+    .sidebar-item{
+        @apply flex items-center justify-between  px-4 py-2 mx-4 my-4 text-sm font-medium rounded-md  ;
+    }
+    .icon{
+        @apply w-4 h-4 mr-2;
+    }
+    button{
+        @apply px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md;
+    }
+}
+
