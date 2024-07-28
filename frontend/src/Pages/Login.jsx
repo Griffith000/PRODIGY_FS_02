@@ -21,7 +21,9 @@ const Login = () => {
           />
         </div>
         <div className="w-1/2 bg-white px-8 py-6 rounded-lg ">
-          <h2 className="text-2xl text-slate-700 font-bold mb-6">Admin Login</h2>
+          <h2 className="text-2xl text-slate-700 font-bold mb-6">
+            Admin Login
+          </h2>
           <form className="flex flex-col gap-3">
             <label className="input input-bordered flex items-center gap-2 bg-slate-100">
               <svg

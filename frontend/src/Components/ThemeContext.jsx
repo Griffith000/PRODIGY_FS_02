@@ -1,13 +1,13 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from "react";
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
 
   const toggleTheme = (newTheme) => {
     setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
   return (
