@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
+// Create a new Sequelize instance
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
 });
@@ -12,6 +13,9 @@ const Employee = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    profile_image: {
+      type: DataTypes.STRING,
     },
     name: {
       type: DataTypes.STRING,
@@ -38,7 +42,7 @@ const Employee = sequelize.define(
 );
 // Synchronize the model with the database
 sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     console.log("employees table has been created.");
   })

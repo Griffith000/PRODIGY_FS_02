@@ -9,10 +9,10 @@ import {
 import { verifyToken } from "../middlewares/verifyToken.js";
 const employeeRouter = express.Router();
 
-employeeRouter.post("/create", verifyToken, createEmployee);
-employeeRouter.get("/get-all", verifyToken, getAllEmployees);
-employeeRouter.get("/get-employee/:id", verifyToken, getEmployee);
-employeeRouter.put("/update/:id", verifyToken, updateEmployee);
-employeeRouter.delete("/delete/:id", verifyToken, deleteEmployee);
+employeeRouter.post("/create", createEmployee);
+employeeRouter.get("/get-all", getAllEmployees);
+employeeRouter.get("/get-employee/:id", getEmployee);
+employeeRouter.put("/update/:id", updateEmployee);
+employeeRouter.delete("/delete/:id", deleteEmployee);
 
 export default employeeRouter;

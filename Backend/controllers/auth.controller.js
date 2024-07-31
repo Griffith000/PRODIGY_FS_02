@@ -1,7 +1,8 @@
-import User from "../models/user.model.js";
+
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import dotenv from "dotenv";
+dotenv.config();
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -12,48 +13,22 @@ export const login = async (req, res) => {
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
       expiresIn: 3600,
     });
-    res.status(200).cookie("accessCookie", token, {
+    let expiryDate = new Date(Number(new Date()) + 60 * 60 * 1000);
+    return res.status(200).cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      maxAge: 3600000,
-    });
-    return res.send({
+      expires:expiryDate,
+      sameSite: 'None', 
+      secure:true// Ensure cross-site cookies are allowed
+    }).json({
       message: "Admin Logged in Successfully",
       role: "Admin",
+      email: email,
+      
     });
   }
-  const user = await User.findOne({ where: { email: req.body.email } });
-  if (!user) {
-    return res.status(404).send({ message: "User Not found." });
-  }
-
-  const passwordIsValid = bcryptjs.compareSync(
-    req.body.password,
-    user.password
-  );
-  if (!passwordIsValid) {
-    return res.status(401).send({
-      accessToken: null,
-      message: "Invalid Password!",
-    });
-  }
-  const token = jwt.sign({ id: user.id }, process.env.SECRET, {
-    expiresIn: 3600, // 1 hour
-  });
-  res.cookie("accessToken", token, {
-    httpOnly: true, // Ensures the cookie is sent only over HTTP(S), not client JavaScript
-    maxAge: 3600000, // 1 hour in milliseconds
-  });
-
-  return res.status(200).send({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: "Admin",
-  });
 };
 export const logout = async (req, res) => {
-  res.clearCookie("accessCookie");
+  res.clearCookie("token");
   return res.send({
     message: "Logged out Successfully",
   });

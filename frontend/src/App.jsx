@@ -7,16 +7,16 @@ import { ThemeProvider } from "./Components/ThemeContext";
 
 function App() {
   return (
-    <ThemeProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/manage-employees" element={<ManageEmployees />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

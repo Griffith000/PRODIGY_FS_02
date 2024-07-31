@@ -13,7 +13,8 @@ export const getAllEmployees = async (req, res) => {
     const result = await sequelize.query(query, {
       type: sequelize.QueryTypes.SELECT,
     });
-    res.send(result);
+    res.setHeader("Content-Type", "application/json");
+    res.json(result);
   } catch (err) {
     res.status(500).send({
       message: err.message || "Some error occurred while retrieving employees.",
@@ -26,7 +27,7 @@ export const getEmployee = async (req, res) => {
 
   Employee.findByPk(id)
     .then((data) => {
-      res.send(data);
+      res.json(data);
     })
     .catch((err) => {
       res.status(500).send({
@@ -39,7 +40,7 @@ export const getEmployee = async (req, res) => {
 export const createEmployee = async (req, res) => {
   // Validate request
   if (!req.body.name) {
-    res.status(400).send({
+    res.status(400).json({
       message: "Content can not be empty!",
     });
     return;
@@ -60,7 +61,7 @@ export const createEmployee = async (req, res) => {
       res.send(data);
     })
     .catch((err) => {
-      res.status(500).send({
+      res.status(500).json({
         message:
           err.message || "Some error occurred while creating the Employee.",
       });
@@ -75,11 +76,11 @@ export const deleteEmployee = async (req, res) => {
   })
     .then((num) => {
       if (num == 1) {
-        res.send({
+        res.json({
           message: "Employee was deleted successfully!",
         });
       } else {
-        res.send({
+        res.json({
           message: `Cannot delete Employee with id=${id}. Maybe Employee was not found!`,
         });
       }
