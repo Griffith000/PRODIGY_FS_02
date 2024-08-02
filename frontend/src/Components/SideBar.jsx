@@ -4,16 +4,19 @@ import { FiHome, FiUsers, FiLogOut, FiUser } from "react-icons/fi";
 import axiosInstance from "../axiosInstance.js";
 import { logout } from "../redux/slices/userSlice";
 import { useDispatch } from "react-redux";
+import {persistor} from "../redux/store";
 const SideBar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handlelogout = async (e) => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post("/api/auth/logout");
       dispatch(logout());
       console.log(response.data);
+      persistor.purge();
       navigate("/");
     } catch (error) {
       console.log(error);

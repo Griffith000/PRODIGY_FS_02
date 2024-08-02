@@ -39,33 +39,29 @@ export const getEmployee = async (req, res) => {
 // Create and Save a new Employee
 export const createEmployee = async (req, res) => {
   // Validate request
-  if (!req.body.name) {
-    res.status(400).json({
-      message: "Content can not be empty!",
-    });
-    return;
+  const { name, position, department, salary, hire_date } = req.body;
+  if (!name || !position || !department || !salary || !hire_date) {
+    return res.status(400).json({ message: "All fields are required" });
   }
 
   // Create an Employee
   const employee = {
-    name: req.body.name,
-    position: req.body.position,
-    department: req.body.department,
-    salary: req.body.salary,
-    hire_date: req.body.hire_date,
+    name,
+    position,
+    department,
+    salary,
+    hire_date,
   };
 
   // Save Employee in the database
-  Employee.create(employee)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message:
-          err.message || "Some error occurred while creating the Employee.",
-      });
+  try {
+    const data = await Employee.create(employee);
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Some error occurred while creating the Employee.",
     });
+  }
 };
 // Find a single Employee with an id and delete it
 export const deleteEmployee = async (req, res) => {

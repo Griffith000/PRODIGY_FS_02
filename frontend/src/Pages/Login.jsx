@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import Lottie from "react-lottie";
-import loginAnimation from "../Lottie-animations/login-animation.json";
+import loginAnimation from "../Lottie-animations/login-animation-2.json";
 import axiosInstance from "../axiosInstance.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar.jsx";
-
 import { loginSuccess, loginFailure } from "../redux/slices/userSlice.js";
+import { useTheme } from "../Components/ThemeContext";
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [formData, setFormData] = useState([]);
-  const error = useSelector((state) => state.user.error);
 
+  const error = useSelector((state) => state.user?.error);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -35,8 +37,12 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center items-center h-screen bg-white">
-        <div className="bg-gray-100 shadow-md rounded px-8 py-6 flex">
+      <div
+        className={`flex justify-center items-center h-screen  ${
+          theme === "dark" ? "bg-slate-700" : "bg-[#f0f0f0]"
+        }`}
+      >
+        <div className="bg-gray-100 shadow-lg rounded-xl px-8 py-6 flex">
           <div className="w-1/2 flex items-center justify-center ">
             <Lottie
               options={{
@@ -55,7 +61,7 @@ const Login = () => {
             <h2 className="text-2xl text-slate-700 font-bold mb-6">
               Admin Login
             </h2>
-            <form className="flex flex-col gap-3">
+            <form className="flex flex-col gap-3 bg-[]">
               <label className="input input-bordered flex items-center gap-2 bg-slate-100">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -98,12 +104,11 @@ const Login = () => {
               </label>
               <button
                 onClick={(e) => handlelogin(e)}
-                className="btn btn-accent"
+                className="btn btn-accent bg-[#669bbc] hover:bg-blue-200 border-none text-white"
               >
                 Login
               </button>
               {error && <p className="text-red-500">Invalid Credentials</p>}
-              <button className="btn btn-link">forgot password</button>
             </form>
           </div>
         </div>

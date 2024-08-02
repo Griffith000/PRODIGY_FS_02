@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+  .navbar-bg {
+    @apply bg-slate-800;
+  }
   .sidebar {
-    @apply flex flex-col w-64 h-screen bg-slate-800 border-r border-gray-300 text-white;
+    @apply flex flex-col w-64 h-screen bg-[#780000] border-r border-gray-300 text-[#fdf0d5];
   }
   .sidebar-item {
     @apply flex items-center justify-between  px-4 py-2 mx-4 my-4 text-sm font-medium rounded-md;
@@ -14,5 +17,8 @@
   }
   button {
     @apply px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md;
+  }
+  .add-employee-input {
+    @apply flex flex-col items-center space-x-2;
   }
 }

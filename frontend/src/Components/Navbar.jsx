@@ -1,20 +1,42 @@
 import React from "react";
 import { useTheme } from "../Components/ThemeContext";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import adminImage from "../../public/admin-image.png";
+import { logout } from "../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosInstance";
+import { persistor } from "../redux/store";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const user = useSelector((state) => state.user.user);
+  console.log(user);
   const location = useLocation();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handlelogout = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.post("/api/auth/logout");
+      dispatch(logout());
+      console.log(response.data);
+      persistor.purge();
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div
       className={`navbar ${
         theme === "dark" ? "dark" : ""
-      } border-b border-b-gray-400 shadow-lg transition-all duration-300 bg-white dark:bg-gray-900 p-4`}
+      } border-b border-b-gray-400 shadow-lg transition-all duration-300 navbar-bg p-4`}
     >
       <div className="flex-1 flex justify-center items-center">
-        <a className="btn btn-ghost text-xl font-bold text-gray-800 dark:text-gray-100">
+        <a className="btn btn-ghost text-xl font-bold dark:text-gray-100">
           Employee Management System
         </a>
       </div>
@@ -66,10 +88,7 @@ const Navbar = () => {
               className="btn btn-ghost btn-circle avatar"
             >
               <div className="w-10 rounded-full">
-                <img
-                  alt="User Avatar"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
+                <img alt="Admin Avatar" src={adminImage} />
               </div>
             </div>
             <ul
@@ -83,7 +102,9 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <Link to="/">Logout</Link>
+                <Link to="/" onClick={handlelogout}>
+                  Logout
+                </Link>
               </li>
             </ul>
           </div>

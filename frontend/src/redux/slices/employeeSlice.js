@@ -1,36 +1,65 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    employees: [],
-    error: false,
-    isAuthenticated: false,
+  employees: [],
+  error: false,
+  isAuthenticated: false,
 };
 const employeeSlice = createSlice({
-    initialState,
-    name: 'employee',
-    reducers : {
-        addEmployee: (state, action) => {
-            state.employees.push(action.payload);
-            state.error = false;
-        },
-        getEmployees: (state, action) => {
-            state.employees = action.payload;
-            state.error = false;
-        },
-        deleteEmployee: (state, action) => {
-            state.employees = state.employees.filter(emp => emp.id !== action.payload.id);
-            state.error = false;
-        },  
-        updateEmployee: (state, action) => {
-            const index = state.employees.findIndex(emp => emp.id === action.payload.id);
-            if (index !== -1) {
-                state.employees[index] = action.payload;
-            }
-            state.error = false;
-        },
-        }
-
+  initialState,
+  name: "employee",
+  reducers: {
+    addEmployeeStart: (state) => {
+      state.error = false;
+    },
+    addEmployeeSuccess: (state, action) => {
+      state.employees.push(action.payload);
+      state.error = false;
+    },
+    addEmployeeFailure: (state) => {
+      state.error = true;
+    },
+    getEmployees: (state, action) => {
+      state.employees = action.payload;
+      state.error = false;
+    },
+    deleteEmployeeStart: (state) => {
+      state.error = false;
+    },
+    deleteEmployeeSuccess: (state, action) => {
+      state.employees = state.employees.filter(
+        (emp) => emp.id !== action.payload.id
+      );
+      state.error = false;
+    },
+    deleteEmployeeFailure: (state) => {
+      state.error = true;
+    },
+    updateEmployeeStart: (state) => {
+      state.error = false;
+    },
+    updateEmployeeSuccess: (state, action) => {
+      state.employees = state.employees.map((emp) =>
+        emp.id === action.payload.id ? action.payload : emp
+      );
+      state.error = false;
+    },
+    updateEmployeeFailure: (state) => {
+      state.error = true;
+    },
+  },
 });
 
-export const {addEmployee,getEmployees, deleteEmployee, updateEmployee} = employeeSlice.actions;
+export const {
+  addEmployeeFailure,
+  addEmployeeStart,
+  addEmployeeSuccess,
+  getEmployees,
+  deleteEmployeeFailure,
+  deleteEmployeeStart,
+  deleteEmployeeSuccess,
+  updateEmployeeFailure,
+  updateEmployeeStart,
+  updateEmployeeSuccess,
+} = employeeSlice.actions;
 export default employeeSlice.reducer;

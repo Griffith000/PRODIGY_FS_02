@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import SideBar from "../Components/SideBar";
 import Navbar from "../Components/Navbar";
 import { useTheme } from "../Components/ThemeContext";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../axiosInstance";
 import { getEmployees } from "../redux/slices/employeeSlice";
 
@@ -11,8 +11,8 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const employees = useSelector((state) => state.employee.employees);
-  // console.log(user);
-  // console.log(employees);
+  console.log(user);
+  console.log(employees);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -21,9 +21,9 @@ const Dashboard = () => {
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.data;
-        console.log(data);
-        dispatch(getEmployees(data));
+        console.log(response.data);
+        dispatch(getEmployees(response.data));
+        localStorage.setItem("employees", JSON.stringify(response.data)); // Save to local storage
       } catch (error) {
         console.error(error);
       }
@@ -31,7 +31,22 @@ const Dashboard = () => {
 
     fetchEmployees();
   }, [dispatch]);
+
+  useEffect(() => {
+    const storedEmployees = localStorage.getItem("employees");
+    if (storedEmployees) {
+      dispatch(getEmployees(JSON.parse(storedEmployees))); // Load from local storage
+    }
+  }, [dispatch]);
+
+  if (!employees) {
+    return <div>Loading...</div>;
+  }
+
   const calculateTotalSalary = () => {
+    if (!employees) {
+      return "loading";
+    }
     const total = employees.reduce(
       (sum, employee) => sum + parseFloat(employee.salary),
       0
@@ -46,18 +61,18 @@ const Dashboard = () => {
     }
     return `$${salary.toFixed(2)}`;
   };
+
   return (
     <div>
       <Navbar />
       <div
         className={`flex items-center justify-center w-full h-screen  ${
-          theme === "dark" ? "bg-slate-700" : "bg-white"
+          theme === "dark" ? "bg-slate-700" : "bg-[#f0f0f0]"
         }`}
       >
         <SideBar />
         <div className="flex-1 flex flex-col justify-center items-center">
           <h1 className="text-4xl font-bold">Dashboard</h1>
-          {/* <div className="flex items-center gap-4 mt-4"></div> */}
 
           <div className="flex flex-wrap gap-3 justify-center mt-8">
             <div className="card bg-blue-500 text-white p-4 rounded-lg shadow-lg">
@@ -66,7 +81,9 @@ const Dashboard = () => {
             </div>
             <div className="card bg-green-500 text-white p-4 rounded-lg shadow-lg">
               <h2 className="text-2xl font-bold">Employees</h2>
-              <p className="text-4xl font-bold">{employees.length}</p>
+              <p className="text-4xl font-bold">
+                {employees.length > 0 ? employees.length : "loading"}
+              </p>
             </div>
             <div className="card bg-purple-500 text-white p-4 rounded-lg shadow-lg">
               <h2 className="text-2xl font-bold">Total Salary</h2>

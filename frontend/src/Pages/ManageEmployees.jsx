@@ -4,13 +4,23 @@ import SideBar from "../Components/SideBar";
 import { useTheme } from "../Components/ThemeContext";
 import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../axiosInstance";
-import { getEmployees } from "../redux/slices/employeeSlice";
+import {
+  getEmployees,
+  deleteEmployeeFailure,
+  deleteEmployeeStart,
+  deleteEmployeeSuccess,
+} from "../redux/slices/employeeSlice";
+import EmployeeForm from "../Components/EmployeeForm";
+import moment from "moment";
+import defaultPicture from "/public/defaultImage.jpg";
 
 const ManageEmployees = () => {
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const employees = useSelector((state) => state.employee.employees);
-  const error = useSelector((state) => state.employee.error);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
   const fetchEmployees = async () => {
     try {
       const response = await axiosInstance.get("/api/employee/get-all");
@@ -27,19 +37,54 @@ const ManageEmployees = () => {
   useEffect(() => {
     fetchEmployees();
   }, []);
+  const handleDelete = async (id) => {
+    console.log("Delete employee clicked");
+    dispatch(deleteEmployeeStart());
+    try {
+      const response = await axiosInstance.delete(`/api/employee/delete/${id}`);
+      if (response.status !== 200) {
+        console.error("Failed to delete employee");
+        return;
+      }
+      dispatch(deleteEmployeeSuccess(response.data));
+      dispatch(getEmployees());
+    } catch (error) {
+      console.error(error);
+      dispatch(deleteEmployeeFailure());
+    }
+  };
+  const handleEdit = async (id) => {
+    console.log("Edit employee clicked");
+    setSelectedEmployeeId(id);
+  };
   return (
     <div>
       <Navbar />
       <div
         className={`flex items-center justify-center w-full h-screen  ${
           theme === "dark" ? "bg-slate-700" : "bg-white"
-        }`}
+        } ${showForm ? "blur-background" : ""} `}
       >
         <SideBar />
         <div className="flex-1 flex flex-col justify-center items-center">
           <h1 className="text-4xl font-bold my-4">Manage Employee </h1>
+          <button
+            className="btn m-4 text-white bg-green-600"
+            onClick={() => {
+              setShowForm(true);
+              setSelectedEmployeeId(null);
+            }}
+          >
+            Add employee
+          </button>
           <div className="overflow-x-auto">
-            <table className="table">
+            {showForm && (
+              <EmployeeForm
+                onClose={() => setShowForm(false)}
+                employeeId={selectedEmployeeId}
+              />
+            )}{" "}
+            <table className="table ">
               {/* head */}
               <thead>
                 <tr>
@@ -52,7 +97,7 @@ const ManageEmployees = () => {
                 </tr>
               </thead>
               <tbody>
-                {employees &&
+                {Array.isArray(employees) &&
                   employees.map((employee) => (
                     <tr key={employee.id}>
                       <th>
@@ -65,8 +110,12 @@ const ManageEmployees = () => {
                           <div className="avatar">
                             <div className="mask mask-squircle h-12 w-12">
                               <img
-                                src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                alt="Avatar Tailwind CSS Component"
+                                src={
+                                  employee.profile_image
+                                    ? employee.profile_image
+                                    : defaultPicture
+                                }
+                                alt="error  "
                               />
                             </div>
                           </div>
@@ -76,7 +125,7 @@ const ManageEmployees = () => {
                         </div>
                       </td>
                       <td>
-                        <span className="badge badge-ghost badge-sm">
+                        <span className="badge badge-ghost badge-sm p-3">
                           {employee.position}
                         </span>
                       </td>
@@ -86,7 +135,28 @@ const ManageEmployees = () => {
                           {employee.salary}
                         </button>
                       </th>
-                      <th>{employee.hire_date}</th>
+                      <th>
+                        {moment(employee.hire_date)
+                          .subtract(10, "days")
+                          .calendar()}
+                      </th>
+                      <td>
+                        <button
+                          className="btn btn-warning btn-xs ml-1"
+                          onClick={() => {
+                            handleEdit(employee.id);
+                            setShowForm(true);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger btn-xs ml-1 "
+                          onClick={() => handleDelete(employee.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
               </tbody>
