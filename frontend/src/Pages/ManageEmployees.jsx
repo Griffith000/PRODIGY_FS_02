@@ -12,31 +12,41 @@ import {
 } from "../redux/slices/employeeSlice";
 import EmployeeForm from "../Components/EmployeeForm";
 import moment from "moment";
-import defaultPicture from "/public/defaultImage.jpg";
+import defaultPicture from "/defaultImage.jpg";
+import ToastMessage, { notify } from "../Components/ToastMessage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export const fetchAndFormatEmployees = async (dispatch) => {
+  try {
+    const response = await axiosInstance.get("/api/employee/get-all");
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+
+    const formattedEmployees = response.data.map((employee) => ({
+      ...employee,
+      hire_date: moment(employee.hire_date).format("YYYY-MM-DD"),
+    }));
+
+    dispatch(getEmployees(formattedEmployees));
+  } catch (error) {
+    dispatch(getEmployees([]));
+    console.error(error);
+  }
+};
 
 const ManageEmployees = () => {
-  const { theme } = useTheme();
   const dispatch = useDispatch();
+  const { theme } = useTheme();
   const employees = useSelector((state) => state.employee.employees);
+
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  const fetchEmployees = async () => {
-    try {
-      const response = await axiosInstance.get("/api/employee/get-all");
-      if (response.status !== 200) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.data;
-      dispatch(getEmployees(data));
-    } catch (error) {
-      dispatch(getEmployees([]));
-      console.error(error);
-    }
-  };
   useEffect(() => {
-    fetchEmployees();
-  }, []);
+    fetchAndFormatEmployees(dispatch);
+  }, [dispatch]);
   const handleDelete = async (id) => {
     console.log("Delete employee clicked");
     dispatch(deleteEmployeeStart());
@@ -46,8 +56,9 @@ const ManageEmployees = () => {
         console.error("Failed to delete employee");
         return;
       }
+
       dispatch(deleteEmployeeSuccess(response.data));
-      dispatch(getEmployees());
+      fetchAndFormatEmployees(dispatch);
     } catch (error) {
       console.error(error);
       dispatch(deleteEmployeeFailure());
@@ -57,6 +68,16 @@ const ManageEmployees = () => {
     console.log("Edit employee clicked");
     setSelectedEmployeeId(id);
   };
+  const handleToggleForm = () => {
+    setShowForm(!showForm);
+  };
+  const handleSuccess = () => {
+    if (showForm) {
+      notify();
+      setShowForm(false);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -82,6 +103,8 @@ const ManageEmployees = () => {
               <EmployeeForm
                 onClose={() => setShowForm(false)}
                 employeeId={selectedEmployeeId}
+                handleToggleForm={handleToggleForm}
+                handleSuccess={handleSuccess}
               />
             )}{" "}
             <table className="table ">
@@ -135,11 +158,7 @@ const ManageEmployees = () => {
                           {employee.salary}
                         </button>
                       </th>
-                      <th>
-                        {moment(employee.hire_date)
-                          .subtract(10, "days")
-                          .calendar()}
-                      </th>
+                      <th>{employee.hire_date}</th>
                       <td>
                         <button
                           className="btn btn-warning btn-xs ml-1"
@@ -164,6 +183,7 @@ const ManageEmployees = () => {
           </div>
         </div>
       </div>
+      <ToastMessage />
     </div>
   );
 };

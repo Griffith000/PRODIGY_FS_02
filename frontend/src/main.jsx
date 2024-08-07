@@ -6,15 +6,16 @@ import { ThemeProvider } from './Components/ThemeContext.jsx'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import {store,persistor} from './redux/store.js'
+import { ToastContainer } from 'react-toastify'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  
     <ThemeProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <App />
+          <ToastContainer/>
         </PersistGate>
       </Provider>
     </ThemeProvider>
-  </React.StrictMode>,
 )

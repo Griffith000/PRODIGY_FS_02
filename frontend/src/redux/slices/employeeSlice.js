@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   employees: [],
   error: false,
-  isAuthenticated: false,
 };
 const employeeSlice = createSlice({
   initialState,

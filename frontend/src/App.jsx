@@ -13,10 +13,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/manage-employees" element={<ManageEmployees />} />
-          <Route path="/profile" element={<Profile />} />
-        </Route>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/manage-employees" element={<ManageEmployees />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

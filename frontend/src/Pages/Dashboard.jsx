@@ -5,6 +5,7 @@ import { useTheme } from "../Components/ThemeContext";
 import { useSelector, useDispatch } from "react-redux";
 import axiosInstance from "../axiosInstance";
 import { getEmployees } from "../redux/slices/employeeSlice";
+import EmployeeChart from "../Components/EmployeeChart";
 
 const Dashboard = () => {
   const { theme } = useTheme();
@@ -71,7 +72,7 @@ const Dashboard = () => {
         }`}
       >
         <SideBar />
-        <div className="flex-1 flex flex-col justify-center items-center">
+        <div className="flex-1 flex flex-col items-center">
           <h1 className="text-4xl font-bold">Dashboard</h1>
 
           <div className="flex flex-wrap gap-3 justify-center mt-8">
@@ -92,23 +93,9 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <div className="separator"></div>
-          <table className="mt-8">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="px-4 py-2">Admin1</td>
-                <td className="px-4 py-2">admin1@example.com</td>
-                <td className="px-4 py-2">Admin</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="flex w-full h-72 items-center justify-center mt-24 ">
+            <EmployeeChart employees={employees} className="" />
+          </div>
         </div>
       </div>
     </div>
