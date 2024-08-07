@@ -13,8 +13,11 @@ import {
 import EmployeeForm from "../Components/EmployeeForm";
 import moment from "moment";
 import defaultPicture from "/defaultImage.jpg";
-import ToastMessage, { notify } from "../Components/ToastMessage";
-import { ToastContainer } from "react-toastify";
+import ToastMessage, {
+  notifySuccess,
+  notifyError,
+  notifyWarning,
+} from "../Components/ToastMessage";
 import "react-toastify/dist/ReactToastify.css";
 
 export const fetchAndFormatEmployees = async (dispatch) => {
@@ -59,6 +62,7 @@ const ManageEmployees = () => {
 
       dispatch(deleteEmployeeSuccess(response.data));
       fetchAndFormatEmployees(dispatch);
+      notifyWarning("Employee deleted successfully !");
     } catch (error) {
       console.error(error);
       dispatch(deleteEmployeeFailure());
@@ -71,11 +75,13 @@ const ManageEmployees = () => {
   const handleToggleForm = () => {
     setShowForm(!showForm);
   };
-  const handleSuccess = () => {
-    if (showForm) {
-      notify();
-      setShowForm(false);
-    }
+  const handleSuccess = (action) => {
+    const message =
+      action === "edit"
+        ? "Employee updated successfully!"
+        : "Employee added successfully!";
+    notifySuccess(message);
+    setShowForm(false);
   };
 
   return (

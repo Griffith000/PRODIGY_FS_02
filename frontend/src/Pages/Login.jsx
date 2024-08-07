@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar.jsx";
 import { loginSuccess, loginFailure } from "../redux/slices/userSlice.js";
 import { useTheme } from "../Components/ThemeContext";
+import ToastMessage, { notifyError } from "../Components/ToastMessage";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -14,7 +16,6 @@ const Login = () => {
   const { theme } = useTheme();
   const [formData, setFormData] = useState([]);
 
-  const error = useSelector((state) => state.user?.error);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -31,6 +32,7 @@ const Login = () => {
     } catch (error) {
       dispatch(loginFailure());
       console.log(error);
+      notifyError("Invalid Credentials");
     }
   };
 
@@ -108,10 +110,10 @@ const Login = () => {
               >
                 Login
               </button>
-              {error && <p className="text-red-500">Invalid Credentials</p>}
             </form>
           </div>
         </div>
+        <ToastMessage />
       </div>
     </>
   );

@@ -76,7 +76,10 @@ const EmployeeForm = ({
             ? updateEmployeeSuccess(response.data)
             : addEmployeeSuccess(response.data)
         );
-        handleSuccess();
+        if (employeeId) handleSuccess("edit");
+        else {
+          handleSuccess("add");
+        }
         fetchAndFormatEmployees(dispatch);
       } else {
         dispatch(employeeId ? updateEmployeeFailure() : addEmployeeFailure());
