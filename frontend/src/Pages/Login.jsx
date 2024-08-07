@@ -5,7 +5,11 @@ import axiosInstance from "../axiosInstance.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar.jsx";
-import { loginSuccess, loginFailure } from "../redux/slices/userSlice.js";
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} from "../redux/slices/userSlice.js";
 import { useTheme } from "../Components/ThemeContext";
 import ToastMessage, { notifyError } from "../Components/ToastMessage";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +19,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [formData, setFormData] = useState([]);
-
+  const loading = useSelector((state) => state.user.loading);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -24,6 +28,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      dispatch(loginStart());
       const response = await axiosInstance.post("/api/auth/login", formData);
       dispatch(loginSuccess(response.data));
       console.log(response.data);
@@ -101,14 +106,18 @@ const Login = () => {
                   type="password"
                   name="password"
                   placeholder="Password"
-                  className="grow"
+                  className="grow text-neutral-700"
                 />
               </label>
               <button
                 onClick={(e) => handlelogin(e)}
                 className="btn btn-accent bg-[#669bbc] hover:bg-blue-200 border-none text-white"
               >
-                Login
+                {loading ? (
+                  <span className="loading loading-spinner loading-md"></span>
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
           </div>

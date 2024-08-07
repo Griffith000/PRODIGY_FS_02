@@ -42,6 +42,7 @@ const EmployeeForm = ({
   const [employee, setEmployee] = useState(employeeToUpdate);
   const [error, setError] = useState(false);
   const [image, setImage] = useState(null);
+  const loading = useSelector((state) => state.employee.loading);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -196,7 +197,9 @@ const EmployeeForm = ({
                 <option disabled>Select department</option>
                 <option value="Technical">Technical</option>
                 <option value="HR">HR</option>
-                <option value="Business">Business</option>
+                <option value="Business">Marketing</option>
+                <option value="Technical">Sales</option>
+                <option value="HR">Customer Service</option>
               </select>
             </div>
             <div className="add-employee-input">
@@ -237,7 +240,13 @@ const EmployeeForm = ({
             type="submit"
             className="bg-blue-500 text-white self-center p-3 rounded-lg w-full hover:bg-blue-600"
           >
-            {employeeId ? "Update" : "Add"}
+            {loading ? (
+              <span className="loading loading-spinner loading-md"></span>
+            ) : employeeId ? (
+              "Update"
+            ) : (
+              "Add"
+            )}
           </button>
           {error && (
             <p className="text-red-500 text-center">

@@ -176,7 +176,7 @@ const ManageEmployees = () => {
                           Edit
                         </button>
                         <button
-                          className="btn btn-danger btn-xs ml-1 "
+                          className="btn btn-danger bg-red-700 text-white btn-xs ml-1 scroll-py-1"
                           onClick={() => handleDelete(employee.id)}
                         >
                           Delete
