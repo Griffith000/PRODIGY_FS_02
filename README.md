@@ -24,7 +24,7 @@ To configure the environment variables for the project, follow these steps:
 1. Create a `.env` file in the root directory of the project and in the root of the `frontend` folder.
 2. Add the following environment variables to the `.env` file:
 
-# ./frontend
+### ./frontend
 `VITE_FIREBASE_API_KEY`
 `VITE_AUTH_DOMAIN`
 `VITE_PROJECT_ID`
@@ -32,7 +32,7 @@ To configure the environment variables for the project, follow these steps:
 `VITE_MESSAGING_SENDER_ID`
 `VITE_APP_ID`
 
-# ./
+### ./
 
 `DATABASE_URL`
 `JWT_SECRET`
