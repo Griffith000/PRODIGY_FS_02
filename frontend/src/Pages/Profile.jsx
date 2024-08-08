@@ -10,8 +10,8 @@ const Profile = () => {
   const { theme } = useTheme();
   if (!user) {
     return (
-      <div className="flex-1 h-screen flex flex-col mt-36 items-center">
-        <h1 className="text-4xl font-bold my-4">Profile</h1>
+      <div className="flex-1 h-screen flex flex-col mt-36 items-center ">
+        <h1 className="text-4xl font-bold my-4 ">Profile</h1>
         <div className="flex w-52 flex-col gap-4">
           <div className="flex items-center gap-4">
             <div className="skeleton h-16 w-16 shrink-0 rounded-full">
@@ -45,7 +45,7 @@ const Profile = () => {
       >
         <SideBar />
         <div className="flex-1 h-screen flex flex-col mt-36 items-center">
-          <h1 className="text-4xl font-bold my-4">Profile</h1>
+          <h1 className="text-4xl font-bold my-4 -mt-3">Profile</h1>
           <div className="flex w-52 flex-col gap-4">
             <div className="flex items-center gap-4">
               <div className="skeleton h-16 w-16 shrink-0 rounded-full">
@@ -64,7 +64,7 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <div className="skeleton h-52 w-full p-3 text-sm">
+            <div className="skeleton h-52 w-60 p-3 text-sm">
               As an admin you have the ability to view and manage employee data,
               including names, positions, departments, salaries, and hire dates.
               You can also edit employee details and control access to the

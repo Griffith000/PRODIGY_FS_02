@@ -197,9 +197,9 @@ const EmployeeForm = ({
                 <option disabled>Select department</option>
                 <option value="Technical">Technical</option>
                 <option value="HR">HR</option>
-                <option value="Business">Marketing</option>
-                <option value="Technical">Sales</option>
-                <option value="HR">Customer Service</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="Customer Service">Customer Service</option>
               </select>
             </div>
             <div className="add-employee-input">

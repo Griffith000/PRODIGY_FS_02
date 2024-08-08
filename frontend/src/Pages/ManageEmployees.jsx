@@ -88,13 +88,13 @@ const ManageEmployees = () => {
     <div>
       <Navbar />
       <div
-        className={`flex items-center justify-center w-full h-screen  ${
+        className={`flex items-center justify-center w-full h-svh ${
           theme === "dark" ? "bg-slate-700" : "bg-white"
         } ${showForm ? "blur-background" : ""} `}
       >
         <SideBar />
         <div className="flex-1 flex flex-col justify-center items-center">
-          <h1 className="text-4xl font-bold my-4">Manage Employee </h1>
+          <h1 className="text-4xl font-bold my-4 -mt-10">Manage Employee </h1>
           <button
             className="btn m-4 text-white bg-green-600"
             onClick={() => {
@@ -104,7 +104,7 @@ const ManageEmployees = () => {
           >
             Add employee
           </button>
-          <div className="overflow-x-auto">
+          <div className="h-96 overflow-y-auto">
             {showForm && (
               <EmployeeForm
                 onClose={() => setShowForm(false)}
@@ -165,9 +165,9 @@ const ManageEmployees = () => {
                         </button>
                       </th>
                       <th>{employee.hire_date}</th>
-                      <td>
+                      <td className="flex justify-center items-end mt-3">
                         <button
-                          className="btn btn-warning btn-xs ml-1"
+                          className="btn btn-warning btn-xs ml-1 py-1 px-2"
                           onClick={() => {
                             handleEdit(employee.id);
                             setShowForm(true);
@@ -176,7 +176,7 @@ const ManageEmployees = () => {
                           Edit
                         </button>
                         <button
-                          className="btn btn-danger bg-red-700 text-white btn-xs ml-1 scroll-py-1"
+                          className="btn btn-danger bg-red-600 text-white hover:bg-red-700 transition duration-200 btn-xs ml-1 py-1 px-2 border-none"
                           onClick={() => handleDelete(employee.id)}
                         >
                           Delete
