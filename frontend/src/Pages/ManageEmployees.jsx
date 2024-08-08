@@ -94,7 +94,7 @@ const ManageEmployees = () => {
       >
         <SideBar />
         <div className="flex-1 flex flex-col justify-center items-center">
-          <h1 className="text-4xl font-bold my-4 -mt-10">Manage Employee </h1>
+          <h1 className="text-4xl font-bold my-4 -mt-10">Manage Employees </h1>
           <button
             className="btn m-4 text-white bg-green-600"
             onClick={() => {
